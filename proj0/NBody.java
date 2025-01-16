@@ -1,12 +1,12 @@
 public class NBody {
 
-    public static double readRadius(String file){
+    public static double readRadius(String file) {
         In in = new In(file);
         int num = in.readInt();
         return in.readDouble();
     }
 
-    public static Planet[] readPlanets(String file){
+    public static Planet[] readPlanets(String file) {
         In p_file = new In(file);
         int num = p_file.readInt();
         double radius = p_file.readDouble();
@@ -27,7 +27,7 @@ public class NBody {
 
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         double T = Double.parseDouble(args[0]);
         double dt = Double.parseDouble(args[1]);
         String filename = args[2];
@@ -39,8 +39,8 @@ public class NBody {
          * 初始化背景以及planet
          */
         StdDraw.setScale(-radius, radius);
-        StdDraw.picture(0,0, "images/starfield.jpg");
-        for (Planet p : all_p){
+        StdDraw.picture(0, 0, "images/starfield.jpg");
+        for (Planet p : all_p) {
             p.draw();
         }
 
@@ -51,7 +51,7 @@ public class NBody {
         /**
          * dt的间隔更新画布
          */
-        while (time < T){
+        while (time < T) {
             int len = all_p.length;
             double[] xForces = new double[len];
             double[] yForces = new double[len];
@@ -63,24 +63,24 @@ public class NBody {
             while (i < len) {
                 xForces[i] = all_p[i].calcNetForceExertedByX(all_p);
                 yForces[i] = all_p[i].calcNetForceExertedByY(all_p);
-                i ++;
+                i++;
             }
 
             i = 0;
-            while(i < len){
+            while (i < len) {
                 all_p[i].update(dt, xForces[i], yForces[i]);
                 i++;
             }
 
             StdDraw.setScale(-radius, radius);
-            StdDraw.picture(0,0, "images/starfield.jpg");
-            for (Planet p : all_p){
+            StdDraw.picture(0, 0, "images/starfield.jpg");
+            for (Planet p : all_p) {
                 p.draw();
             }
 
             StdDraw.show();
             StdDraw.pause(10);
-            time+=dt;
+            time += dt;
 
         }
 
