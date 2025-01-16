@@ -20,11 +20,11 @@ public class Planet {
 
     }
 
-    public Double calcDistance(Planet p){
+    public double calcDistance(Planet p){
         return Math.sqrt((xxPos - p.xxPos)*(xxPos - p.xxPos) + (yyPos - p.yyPos)*(yyPos - p.yyPos));
     }
 
-    public Double calcForceExertedBy(Planet p){
+    public double calcForceExertedBy(Planet p){
         double G = 6.67e-11;
         double r = this.calcDistance(p);
         double r_square = r*r;
@@ -33,17 +33,17 @@ public class Planet {
 
     }
 
-    public Double calcForceExertedByX(Planet p){
+    public double calcForceExertedByX(Planet p){
         double F = this.calcForceExertedBy(p);
         return F*(p.xxPos - this.xxPos)/this.calcDistance(p);
     }
 
-    public Double calcForceExertedByY(Planet p){
+    public double calcForceExertedByY(Planet p){
         double F = this.calcForceExertedBy(p);
         return F*(p.yyPos - this.yyPos)/this.calcDistance(p);
     }
 
-    public Double calcNetForceExertedByX(Planet[] allP){
+    public double calcNetForceExertedByX(Planet[] allP){
         double allx = 0.0;
         for (Planet p: allP){
             if (this.equals(p)){
@@ -56,7 +56,7 @@ public class Planet {
         return allx;
     }
 
-    public Double calcNetForceExertedByY(Planet[] allP){
+    public double calcNetForceExertedByY(Planet[] allP){
         double ally = 0.0;
         for (Planet p: allP){
             if (this.equals(p)){
