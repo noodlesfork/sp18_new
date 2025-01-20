@@ -1,0 +1,98 @@
+public class LinkedListDeque<T> {
+
+    private final IntDeque sentinel;
+    private int size;
+
+
+    public class IntDeque {
+        public IntDeque prev;
+        public T value;
+        public IntDeque next;
+
+        public IntDeque(IntDeque p, T x, IntDeque n) {
+            value = x;
+            prev = p;
+            next = n;
+        }
+
+    }
+
+
+    public LinkedListDeque() {
+        sentinel = new IntDeque(null, null, null);
+        sentinel.next = sentinel;
+        sentinel.prev = sentinel;
+        size = 0;
+    }
+
+    public void addFirst(T x) {
+        sentinel.next = new IntDeque(sentinel, x, sentinel.next);
+        sentinel.next.next.prev = sentinel.next;
+        size += 1;
+
+    }
+
+    public void addLast(T x) {
+        sentinel.prev = new IntDeque(sentinel.prev, x, sentinel);
+        sentinel.prev.prev.next = sentinel.prev;
+        size += 1;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public int size() {
+        return this.size;
+    }
+
+    public void printDeque() {
+
+        IntDeque temp = sentinel.next;
+        for (int i = 0; i < size; i++) {
+            System.out.print(temp.value + " ");
+            temp = temp.next;
+        }
+    }
+
+    public T removeFirst() {
+
+        if (size == 0) {
+            return null;
+        } else {
+            T temp = sentinel.next.value;
+            sentinel.next = sentinel.next.next;
+            sentinel.next.prev = sentinel;
+            size -= 1;
+            return temp;
+        }
+
+    }
+
+    public T removeLast() {
+
+        if (size == 0) {
+            return null;
+        } else {
+            T temp = sentinel.prev.value;
+            sentinel.prev = sentinel.prev.prev;
+            sentinel.prev.next = sentinel;
+            size -= 1;
+            return temp;
+        }
+    }
+
+    public T get(int index) {
+        if (size == 0) {
+            return null;
+        } else {
+            IntDeque temp = sentinel.next;
+            for (int i = 0; i < index; i++) {
+                temp = temp.next;
+            }
+            return temp.value;
+        }
+    }
+
+
+}
