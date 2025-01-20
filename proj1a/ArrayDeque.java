@@ -12,9 +12,9 @@ public class ArrayDeque<T> {
         nextLast = 4;
     }
 
-    public void resize(int new_size) {
+    private void resize(int newSize) {
 
-        T[] items_resized = (T[]) new Object[new_size];
+        T[] itemsResized = (T[]) new Object[newSize];
         /*
         有没有可能搞一个getnowFirst的函数
          */
@@ -34,15 +34,15 @@ public class ArrayDeque<T> {
         }
 
         if (nowFirst < nowLast) {
-            System.arraycopy(items, nowFirst, items_resized, 0, nowLast - nowFirst + 1);
+            System.arraycopy(items, nowFirst, itemsResized, 0, nowLast - nowFirst + 1);
         } else if (nowFirst > nowLast) {
-            System.arraycopy(items, nowFirst, items_resized, 0, items.length - nowFirst);
-            System.arraycopy(items, 0, items_resized, items.length - nowFirst, nowLast + 1);
+            System.arraycopy(items, nowFirst, itemsResized, 0, items.length - nowFirst);
+            System.arraycopy(items, 0, itemsResized, items.length - nowFirst, nowLast + 1);
         } else {
             System.out.println("nowFirst and nowLast should not be equal!");
         }
 
-        items = items_resized;
+        items = itemsResized;
         nextFirst = items.length - 1;
         nextLast = size;
         this.printDeque();
@@ -97,11 +97,11 @@ public class ArrayDeque<T> {
     public void printDeque() {
         int i = 0;
         while (i < size) {
-            int index_to_print = nextFirst + i + 1;
-            if (index_to_print <= items.length - 1) {
-                System.out.print(items[index_to_print] + " ");
+            int indexToPrint = nextFirst + i + 1;
+            if (indexToPrint <= items.length - 1) {
+                System.out.print(items[indexToPrint] + " ");
             } else {
-                System.out.print(items[index_to_print - items.length] + " ");
+                System.out.print(items[indexToPrint - items.length] + " ");
             }
 
             i++;
@@ -109,6 +109,9 @@ public class ArrayDeque<T> {
     }
 
     public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
 
         if (nextFirst == items.length - 1) {
             nextFirst = 0;
@@ -118,7 +121,6 @@ public class ArrayDeque<T> {
 
         T temp = items[nextFirst];
         size -= 1;
-        items[nextFirst] = null;
 
         if (items.length >= 16 && size <= 0.25 * items.length) {
             resize(Math.floorDiv(items.length, 2));
@@ -129,6 +131,10 @@ public class ArrayDeque<T> {
     }
 
     public T removeLast() {
+
+        if (size == 0) {
+            return null;
+        }
         if (nextLast == 0) {
             nextLast = items.length - 1;
         } else {
@@ -137,7 +143,6 @@ public class ArrayDeque<T> {
 
         T temp = items[nextLast];
         size -= 1;
-        items[nextLast] = null;
 
         if (items.length >= 16 && size <= 0.25 * items.length) {
             resize(Math.floorDiv(items.length, 2));
@@ -151,11 +156,11 @@ public class ArrayDeque<T> {
         if (index >= size) {
             return null;
         } else {
-            int index_should_be = nextFirst + index + 1;
-            if (index_should_be >= items.length) {
-                return items[index_should_be - items.length];
+            int indexShouldBe = nextFirst + index + 1;
+            if (indexShouldBe >= items.length) {
+                return items[indexShouldBe - items.length];
             } else {
-                return items[index_should_be];
+                return items[indexShouldBe];
             }
         }
 
