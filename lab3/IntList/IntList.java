@@ -176,19 +176,19 @@ public class IntList {
      * as THIS. Cannot handle IntLists with cycles. You are not expected to
      * read or understand this method.
      */
-    public boolean equals(Object x) {
-        if (!(x instanceof IntList L)) {
-            return false;
-        }
-        IntList p;
-
-        for (p = this; p != null && L != null; p = p.rest, L = L.rest) {
-            if (p.first != L.first) {
-                return false;
-            }
-        }
-        return p == null && L == null;
-    }
+//    public boolean equals(Object x) {
+//        if (!(x instanceof IntList L)) {
+//            return false;
+//        }
+//        IntList p;
+//
+//        for (p = this; p != null && L != null; p = p.rest, L = L.rest) {
+//            if (p.first != L.first) {
+//                return false;
+//            }
+//        }
+//        return p == null && L == null;
+//    }
 
     /**
      * If a cycle exists in the IntList, this method
