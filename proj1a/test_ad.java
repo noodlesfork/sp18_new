@@ -55,12 +55,13 @@ public class test_ad {
     }
 
 
+
     public static void main(String[] args){
 //        test_isEmpty();
 //        test_size();
 //        test_addFirstLast();
-//        test_removeFirstLast();
-        test_get();
+        test_removeFirstLast();
+//        test_get();
 
     }
 }

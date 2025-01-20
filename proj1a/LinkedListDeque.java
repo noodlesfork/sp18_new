@@ -19,7 +19,7 @@ public class LinkedListDeque<T> {
             if (index == 0) {
                 return this.next.value;
             } else {
-                return this.next.get(index-1);
+                return this.next.get(index - 1);
             }
 
         }
@@ -100,12 +100,12 @@ public class LinkedListDeque<T> {
         if (index == 0) {
             return sentinel.next.value;
         } else {
-            return sentinel.next.get(index-1);
+            return sentinel.next.get(index - 1);
         }
 
     }
 
-    public T getRecursive(int index){
+    public T getRecursive(int index) {
         if (size == 0) {
             return null;
         } else {

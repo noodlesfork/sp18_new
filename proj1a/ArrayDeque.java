@@ -43,7 +43,7 @@ public class ArrayDeque<T> {
         }
 
         items = itemsResized;
-        nextFirst = items.length - 1;
+        nextFirst = newSize - 1;
         nextLast = size;
 
     }
@@ -146,7 +146,7 @@ public class ArrayDeque<T> {
             resize(Math.floorDiv(items.length, 2));
         }
 
-        return items[nextLast];
+        return temp;
 
     }
 
