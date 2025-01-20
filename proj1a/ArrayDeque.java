@@ -45,8 +45,6 @@ public class ArrayDeque<T> {
         items = itemsResized;
         nextFirst = items.length - 1;
         nextLast = size;
-        this.printDeque();
-        System.out.println();
 
     }
 
