@@ -9,10 +9,12 @@ public class Palindrome {
     }
 
     public boolean isPalindrome(String word) {
+        if (word == null || word.isEmpty()) {
+            return true;
+        }
         Deque<Character> A = wordToDeque(word);
-        Deque<Character> B = wordToDeque(word);
-        for (int i = 0; i < word.length(); i++) {
-            if (A.removeFirst() != B.removeLast()) {
+        while(A.size() > 1) {
+            if (A.removeFirst() != A.removeLast()) {
                 return false;
             }
         }
