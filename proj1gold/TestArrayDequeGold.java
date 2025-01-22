@@ -20,8 +20,10 @@ public class TestArrayDequeGold {
         }
 
         for (int i = 0; i < 15; i ++) {
-            output += "removeLast\n";
+            output += "removeLast";
             assertEquals(output, sad1.removeLast(), ads1.removeLast());
+            output += "\n";
+
         }
     }
 
@@ -43,8 +45,9 @@ public class TestArrayDequeGold {
         }
 
         for (int i = 0; i < 15; i ++) {
-            output += "removeLast\n";
+            output += "removeLast";
             assertEquals(output, sad1.removeLast(), ads1.removeLast());
+            output += "\n";
         }
     }
 
