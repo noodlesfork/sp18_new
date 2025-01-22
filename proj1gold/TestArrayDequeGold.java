@@ -15,14 +15,12 @@ public class TestArrayDequeGold {
             int A = StdRandom.uniform(n);
             sad1.addLast(A);
             ads1.addLast(A);
-            output += String.format("addLast(%d)", A);
-            output += "\n";
+            output += "addFirst(" + A + ")\n";
         }
 
         for (int i = 0; i < 15; i ++) {
-            output += "removeLast";
+            output += "removeLast\n";
             assertEquals(output, sad1.removeLast(), ads1.removeLast());
-            output += "\n";
 
         }
     }
