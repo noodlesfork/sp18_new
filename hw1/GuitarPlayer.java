@@ -39,8 +39,8 @@ public class GuitarPlayer {
     }
 
     private void initialize() {
-        strings = new GuitarString[128];
-        vol = new double[128];
+        strings = new GuitarString[128]; // 128
+        vol = new double[128]; // 128
         for (int i = 0; i < strings.length; i++) {
             strings[i] = new GuitarString(440.0 * Math.pow(2.0, (i - 69.0) / 12.0));
             vol[i] = 0.0;
