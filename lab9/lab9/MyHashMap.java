@@ -7,12 +7,13 @@ import java.util.Set;
  *  A hash table-backed Map implementation. Provides amortized constant time
  *  access to elements via get(), remove(), and put() in the best case.
  *
- *  @author Your name here
+ *  @author Xingsi Xie
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
     private static final int DEFAULT_SIZE = 16;
     private static final double MAX_LF = 0.75;
+    private int nowSize = DEFAULT_SIZE;
 
     private ArrayMap<K, V>[] buckets;
     private int size;
@@ -53,19 +54,46 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+       if (size == 0) {
+           return null;
+       }
+       return this.buckets[hash(key)].get(key);
     }
 
     /* Associates the specified value with the specified key in this map. */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        try {
+            boolean checkKeys = buckets[hash(key)].containsKey(key);
+            this.buckets[hash(key)].put(key, value);
+            if (! checkKeys) {
+                size += 1;
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.print(e);
+        }
+        if ((double) this.size / nowSize >= MAX_LF) {
+            this.resize();
+        }
+    }
+
+    public void resize() {
+        nowSize *= 2;
+        ArrayMap<K, V>[] tempBuckets = this.buckets;
+        this.buckets = new ArrayMap[nowSize];
+        clear();
+        for (int i = 0; i < tempBuckets.length; i += 1) {
+            for (K key: tempBuckets[i]) {
+                V value = tempBuckets[i].get(key);
+                put(key, value);
+            }
+        }
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return this.size;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
