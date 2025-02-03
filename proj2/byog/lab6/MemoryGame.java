@@ -19,13 +19,14 @@ public class MemoryGame {
                                                    "Too easy for you!", "Wow, so impressive!"};
 
     public static void main(String[] args) {
-        if (args.length < 1) {
-            System.out.println("Please enter a seed");
-            return;
-        }
+//        if (args.length < 1) {
+//            System.out.println("Please enter a seed");
+//            return;
+//        }
 
-        int seed = Integer.parseInt(args[0]);
-        MemoryGame game = new MemoryGame(40, 40);
+//        int seed = Integer.parseInt(args[0]);
+        int seed = 12345;
+        MemoryGame game = new MemoryGame(60, 60);
         game.startGame();
     }
 
@@ -42,33 +43,109 @@ public class MemoryGame {
         StdDraw.setYscale(0, this.height);
         StdDraw.clear(Color.BLACK);
         StdDraw.enableDoubleBuffering();
+        rand = new Random();
 
-        //TODO: Initialize random number generator
     }
 
     public String generateRandomString(int n) {
-        //TODO: Generate random string of letters of length n
-        return null;
+        char[] RandomChar = new char[n];
+        for (int i = 0; i < n; i += 1) {
+            RandomChar[i] = CHARACTERS[rand.nextInt(26)];
+        }
+
+        return new String(RandomChar);
     }
 
     public void drawFrame(String s) {
-        //TODO: Take the string and display it in the center of the screen
-        //TODO: If game is not over, display relevant game information at the top of the screen
+        StdDraw.clear();
+        String encouragement = ENCOURAGEMENT[rand.nextInt(ENCOURAGEMENT.length)];
+        String step = "Watch!";
+        if (playerTurn) {
+            step = "Now it's your turn!";
+        }
+
+        if (gameOver) {
+            StdDraw.text(this.width * 0.5, this.height - 1, "Game Over! You made it to round: " + round);
+            StdDraw.line(0, this.height - 2, this.width, this.height - 2);
+            StdDraw.show();
+        } else {
+            // 画框架
+            Font headFont = new Font("Monaco", Font.BOLD, 20);
+            StdDraw.setFont(headFont);
+            StdDraw.text(8, this.height - 1, "Round: " + round);
+            StdDraw.text(this.width * 0.5, this.height - 1, step);
+            if (playerTurn) {
+                StdDraw.text(this.width - 10, this.height - 1, encouragement);
+            }
+            StdDraw.line(0, this.height - 2, this.width, this.height - 2);
+
+            // 写字
+            if (s != null) {
+                Font font = new Font("Monaco", Font.BOLD, 30);
+                StdDraw.setFont(font);
+                StdDraw.text(this.width * 0.5, this.height * 0.5, s);
+            }
+            StdDraw.show();
+        }
     }
 
-    public void flashSequence(String letters) {
-        //TODO: Display each character in letters, making sure to blank the screen between letters
+    public void flashSequence(String letters) throws InterruptedException {
+        char[] StringArray = letters.toCharArray();
+        for (char c : StringArray) {
+            drawFrame(String.valueOf(c));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            drawFrame(null);
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
     public String solicitNCharsInput(int n) {
-        //TODO: Read n letters of player input
-        return null;
+        StringBuilder input= new StringBuilder();
+        drawFrame(null);
+        while (input.length() < n) {
+            if(StdDraw.hasNextKeyTyped()){
+                char c = StdDraw.nextKeyTyped();
+                input.append(c);
+            }
+        }
+        return input.toString();
     }
+
 
     public void startGame() {
         //TODO: Set any relevant variables before the game starts
+        round = 1;
+        while (true) {
+            playerTurn = false;
+            String RandomString = generateRandomString(round);
+            try {
+                flashSequence(RandomString);
+            } catch (InterruptedException e) {
+                System.err.println("The sequence was interrupted: " + e.getMessage());
+            }
 
-        //TODO: Establish Game loop
+            playerTurn = true;
+            String UserString = solicitNCharsInput(round);
+            if (! UserString.equals(RandomString)) {
+                gameOver = true;
+                drawFrame(null);
+                break;
+            }
+
+            round += 1;
+        }
+
     }
+
 
 }

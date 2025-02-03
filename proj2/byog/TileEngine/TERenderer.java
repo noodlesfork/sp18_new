@@ -1,5 +1,7 @@
 package byog.TileEngine;
 
+import byog.Core.Game;
+import byog.NewWorldGenerator;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.Color;
@@ -17,6 +19,7 @@ public class TERenderer {
     private int height;
     private int xOffset;
     private int yOffset;
+
 
     /**
      * Same functionality as the other initialization method. The only difference is that the xOff
@@ -84,6 +87,7 @@ public class TERenderer {
      * @param world the 2D TETile[][] array to render
      */
     public void renderFrame(TETile[][] world) {
+        StdDraw.clear(Color.BLACK);
         int numXTiles = world.length;
         int numYTiles = world[0].length;
         StdDraw.clear(new Color(0, 0, 0));
@@ -96,6 +100,42 @@ public class TERenderer {
                 world[x][y].draw(x + xOffset, y + yOffset);
             }
         }
+
+        showHoverDescription();
+        showLocation();
+
         StdDraw.show();
+        StdDraw.pause(20);
+
+    }
+
+    public void showHoverDescription() {
+        // 仅更新描述，不重新绘制整个世界
+        int mouseX = (int) (StdDraw.mouseX() - xOffset);
+        int mouseY = (int) (StdDraw.mouseY() - yOffset);
+
+        if (mouseX >= 0 && mouseX < NewWorldGenerator.PRandomWorld.length && mouseY >= 0 && mouseY < NewWorldGenerator.PRandomWorld[0].length) {
+            StdDraw.setPenColor(Color.WHITE);
+            StdDraw.textLeft(1, 1, NewWorldGenerator.PRandomWorld[mouseX][mouseY].description());
+        }
+    }
+
+    public void showLocation() {
+        if (StdDraw.hasNextKeyTyped()) {
+            NewWorldGenerator.Position temp = new NewWorldGenerator.Position(NewWorldGenerator.playerPosition.x, NewWorldGenerator.playerPosition.y);
+            char direction = Character.toUpperCase(StdDraw.nextKeyTyped());
+            int[] change = Game.directionMap.get(direction);
+            if (change != null) {
+                if (NewWorldGenerator.PRandomWorld[temp.x + change[0]][temp.y + change[1]] != Tileset.WALL && NewWorldGenerator.PRandomWorld[temp.x + change[0]][temp.y + change[1]] != Tileset.LOCKED_DOOR) {
+                    NewWorldGenerator.playerPosition.x += change[0];
+                    NewWorldGenerator.playerPosition.y += change[1];
+
+                }
+            }
+
+            NewWorldGenerator.PRandomWorld[temp.x][temp.y] = Tileset.FLOOR;
+            NewWorldGenerator.PRandomWorld[NewWorldGenerator.playerPosition.x][NewWorldGenerator.playerPosition.y] = Tileset.PLAYER;
+        }
+
     }
 }
