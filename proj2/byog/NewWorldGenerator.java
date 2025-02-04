@@ -63,8 +63,8 @@ public class NewWorldGenerator {
         InitializeWorld(PRandomWorld);
 
         // 随机生成初始点
-        int StartX = r.nextInt(WIDTH);
-        int StartY = r.nextInt(HEIGHT);
+        int StartX = r.nextInt(WIDTH - 4) + 2;
+        int StartY = r.nextInt(HEIGHT - 4) + 2;
         Position StartP = new Position(StartX, StartY);
 
         // 随机生成初始方向
@@ -79,25 +79,26 @@ public class NewWorldGenerator {
 
     }
 
-    public static void letsBegin(boolean keyboard) {
-        ter.initialize(WIDTH, HEIGHT);
+    public static void getPlayerPosition() {
+        for (int i = 0; i < WIDTH; i += 1) {
+            for (int j = 0; j < HEIGHT; j += 1) {
+                System.out.println("111");
+                if (PRandomWorld[i][j] == Tileset.PLAYER) {
 
-        if (PRandomWorld[playerPosition.x][playerPosition.y] != Tileset.PLAYER) {
-            for (int i = 0; i < WIDTH; i += 1) {
-                for (int j = 0; j < HEIGHT; j += 1) {
-                    if (PRandomWorld[i][j] == Tileset.PLAYER) {
-                        playerPosition.x = i;
-                        playerPosition.y = j;
-                        break;
-                    }
+                    playerPosition.x = i;
+                    playerPosition.y = j;
+                    break;
                 }
             }
-            PRandomWorld[playerPosition.x][playerPosition.y] = Tileset.PLAYER;
         }
+        System.out.println(playerPosition.x);
+        PRandomWorld[playerPosition.x][playerPosition.y] = Tileset.PLAYER;
+    }
 
-        while (keyboard) {
+    public static void letsBegin() {
+        ter.initialize(WIDTH, HEIGHT);
+        while (true) {
             ter.renderFrame(PRandomWorld);
         }
-        ter.renderFrame(PRandomWorld);
     }
 }

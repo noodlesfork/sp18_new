@@ -24,6 +24,7 @@ public class Game {
     public static final char[] options= "NLQ".toCharArray();
     public static int randomSeed;
     public static boolean keyboard;
+    public static boolean saveTheWorld = true;
 
     public Game() {
         StdDraw.setCanvasSize(WIDTH * 16, HEIGHT * 16);
@@ -117,14 +118,21 @@ public class Game {
                     randomSeed = userSeed();
                 }
                 NewWorldGenerator.generateWorld(randomSeed);
-                NewWorldGenerator.letsBegin(keyboard);
+                NewWorldGenerator.letsBegin();
                 break;
             case 'L':
-                loadProject();
-                NewWorldGenerator.letsBegin(keyboard);
+                try {
+                    GameState gs = loadGame("myWorld.ser");
+                    NewWorldGenerator.PRandomWorld = gs.tiles;
+                    NewWorldGenerator.playerPosition.x = gs.playerPosition[0];
+                    NewWorldGenerator.playerPosition.y = gs.playerPosition[1];
+                    NewWorldGenerator.getPlayerPosition();
+                    NewWorldGenerator.letsBegin();
+                } catch (IOException | ClassNotFoundException e) {
+                    System.out.println("项目加载失败");
+                }
                 break;
             case 'Q':
-                saveProject(NewWorldGenerator.PRandomWorld);
                 System.exit(0);
                 break;
         }
@@ -153,6 +161,12 @@ public class Game {
         char[] newInput = input.toCharArray();
         keyboard = false;
 
+        Pattern quitP = Pattern.compile(":Q");
+        Matcher quitM = quitP.matcher(input);
+        if (quitM.find()) {
+            saveTheWorld = true;
+        }
+
         if (newInput[0] == 'N') {
             Pattern pattern = Pattern.compile("^N(\\d+)S([WASD]+)(:Q)?$");
             Matcher matcher = pattern.matcher(input);
@@ -161,26 +175,40 @@ public class Game {
                 randomSeed = Integer.parseInt(numStr);
                 NewWorldGenerator.generateWorld(randomSeed);
                 letsMove(matcher.group(2));
-                NewWorldGenerator.letsBegin(keyboard);
+                if (saveTheWorld) {
+                    return NewWorldGenerator.PRandomWorld;
+                } else {
+                    NewWorldGenerator.letsBegin();
+                }
+
             } else {
                 System.out.println("未找到数字！");
             }
         } else if (newInput[0] == 'L') {
-            gameOption('L');
-            Pattern r = Pattern.compile("[WASD]+");
-            Matcher matcher = r.matcher(input);
-            if (matcher.find()) {
-                letsMove(matcher.group());
+            try {
+                GameState gs = loadGame("myWorld.ser");
+                NewWorldGenerator.PRandomWorld = gs.tiles;
+                NewWorldGenerator.playerPosition.x = gs.playerPosition[0];
+                NewWorldGenerator.playerPosition.y = gs.playerPosition[1];
+                Pattern r = Pattern.compile("[WASD]+");
+                Matcher matcher = r.matcher(input);
+
+                if (matcher.find()) {
+                    letsMove(matcher.group());
+                }
+
+                if (saveTheWorld) {
+                    return NewWorldGenerator.PRandomWorld;
+                } else {
+                    NewWorldGenerator.letsBegin();
+                }
+                System.out.println("项目加载成功");
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("项目加载失败");
             }
-            NewWorldGenerator.letsBegin(keyboard);
         }
 
-        Pattern r = Pattern.compile(":Q");
-        Matcher matcher = r.matcher(input);
-        if (matcher.find()) {
-            return NewWorldGenerator.PRandomWorld;
-        }
-        return null;
+        return NewWorldGenerator.PRandomWorld;
     }
 
     public static void letsMove(String move) {
@@ -191,7 +219,7 @@ public class Game {
             System.out.println(Arrays.toString(change));
             if (change != null) {
                 System.out.println("moving");
-                if (NewWorldGenerator.PRandomWorld[temp.x + change[0]][temp.y + change[1]] != Tileset.WALL && NewWorldGenerator.PRandomWorld[temp.x + change[0]][temp.y + change[1]] != Tileset.LOCKED_DOOR) {
+                if (! NewWorldGenerator.PRandomWorld[temp.x + change[0]][temp.y + change[1]].equals(Tileset.WALL)  && !NewWorldGenerator.PRandomWorld[temp.x + change[0]][temp.y + change[1]].equals(Tileset.LOCKED_DOOR)) {
 
                     NewWorldGenerator.playerPosition.x += change[0];
                     NewWorldGenerator.playerPosition.y += change[1];
@@ -202,38 +230,26 @@ public class Game {
         }
     }
 
-
-    public static void saveProject(TETile[][] world) {
-        if (world != null) {
-            String filePath = "myWorld.ser";
-            try (ObjectOutputStream oos = new ObjectOutputStream(
-                    new FileOutputStream(filePath))) {
-                oos.writeObject(world);
-                System.out.println("项目保存成功！");
-                System.exit(0);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-    public static void loadProject() {
-        String filePath = "myWorld.ser";
-        try (ObjectInputStream ois = new ObjectInputStream(
-                new FileInputStream(filePath))) {
-            NewWorldGenerator.PRandomWorld = (TETile[][]) ois.readObject();
-            System.out.println("项目加载成功！");
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+    public static void saveGame(String filePath, GameState state) throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            oos.writeObject(state);
         }
     }
 
+    public static GameState loadGame(String filePath) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+            return (GameState) ois.readObject();
+        }
+    }
 
-    public static void main(String[] args) {
-        Game game = new Game();
-//        game.playWithKeyboard();
-        TETile[][] world = game.playWithInputString("LWWWDDD");
-        saveProject(world);
+    public static class GameState implements Serializable {
+        private static final long serialVersionUID = 1L;
+        public TETile[][] tiles;
+        public int[] playerPosition;
+
+        public GameState(TETile[][] tiles, int[] playerPosition) {
+            this.tiles = tiles;
+            this.playerPosition = playerPosition;
+        }
     }
 }
