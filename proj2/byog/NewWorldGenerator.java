@@ -4,7 +4,6 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 import byog.TileEngine.TERenderer;
 import java.util.Random;
-import java.util.HashMap;
 
 public class NewWorldGenerator {
     private static final int WIDTH = 100;

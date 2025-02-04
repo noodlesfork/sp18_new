@@ -5,7 +5,7 @@ import java.util.Formatter;
  * with a large number of additional methods.
  *
  * @author P. N. Hilfinger, with some modifications by Josh Hug and melaniecebula
- *         [Do not modify this file.]
+ * [Do not modify this file.]
  */
 public class IntList {
     /**
@@ -29,7 +29,7 @@ public class IntList {
      * A List with null rest, and first = 0.
      */
     public IntList() {
-    /* NOTE: public IntList () { }  would also work. */
+        /* NOTE: public IntList () { }  would also work. */
         this(0, null);
     }
 
@@ -82,16 +82,15 @@ public class IntList {
 
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO:  fill in method
-        if (A == null){
+        if (A == null) {
             return B;
         }
-        if (B == null){
+        if (B == null) {
             return A;
         }
-        if (A.rest == null){
+        if (A.rest == null) {
             A.rest = B;
-        }
-        else{
+        } else {
             A.rest = dcatenate(A.rest, B);
         }
         return A;
@@ -103,39 +102,24 @@ public class IntList {
      */
     public static IntList catenate(IntList A, IntList B) {
         //TODO:  fill in method
-        
-        if (A == null){
+
+        if (A == null) {
             return B;
         }
-        if (B == null){
+        if (B == null) {
             return A;
         }
 
         IntList concat = new IntList();
         concat.first = A.first;
-        if (A.rest == null){
+        if (A.rest == null) {
             concat.rest = B;
-        }
-        else {
+        } else {
             concat.rest = catenate(A.rest, B);
         }
         return concat;
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -176,10 +160,9 @@ public class IntList {
      * read or understand this method.
      */
     public boolean equals(Object x) {
-        if (!(x instanceof IntList)) {
+        if (!(x instanceof IntList L)) {
             return false;
         }
-        IntList L = (IntList) x;
         IntList p;
 
         for (p = this; p != null && L != null; p = p.rest, L = L.rest) {
@@ -187,10 +170,7 @@ public class IntList {
                 return false;
             }
         }
-        if (p != null || L != null) {
-            return false;
-        }
-        return true;
+        return p == null && L == null;
     }
 
     /**
