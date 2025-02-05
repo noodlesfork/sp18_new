@@ -25,7 +25,7 @@ public class PercolationStats {
                 int serial = r.nextInt(N * N);
                 P.open(Math.floorDiv(serial, N), serial % N);
             }
-            X[i] = P.numberOfOpenSites();
+            X[i] = P.numberOfOpenSites() / (N * N);
         }
 
     }
