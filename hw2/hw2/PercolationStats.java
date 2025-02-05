@@ -4,9 +4,9 @@ import java.util.Random;
 
 
 public class PercolationStats {
-    public int[] X; //用于储存试验中的open grid数量
-    public Random r = new Random();
-    public int testAmount;
+    private int[] X; //用于储存试验中的open grid数量
+    private Random r = new Random();
+    private int testAmount;
 
     public PercolationStats(int N, int T, PercolationFactory pf) { // perform T independent experiments on an N-by-N grid
         if (N <= 0) {
@@ -17,9 +17,9 @@ public class PercolationStats {
             throw new IllegalArgumentException("Experiment amount should be larger than 0");
         }
 
-        X = new int[N];
+        X = new int[T];
         testAmount = T;
-        for (int i = 0; i < T; i += 1) {
+        for (int i = 0; i < testAmount; i += 1) {
             Percolation P = pf.make(N);
             while (!P.percolates()) {
                 int serial = r.nextInt(N * N);
