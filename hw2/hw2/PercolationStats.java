@@ -4,7 +4,7 @@ import java.util.Random;
 
 
 public class PercolationStats {
-    private int[] X; //用于储存试验中的open grid数量
+    private double[] X; //用于储存试验中的open grid数量
     private Random r = new Random();
     private int testAmount;
 
@@ -17,7 +17,7 @@ public class PercolationStats {
             throw new IllegalArgumentException("Experiment amount should be larger than 0");
         }
 
-        X = new int[T];
+        X = new double[T];
         testAmount = T;
         for (int i = 0; i < testAmount; i += 1) {
             Percolation P = pf.make(N);
@@ -25,13 +25,13 @@ public class PercolationStats {
                 int serial = r.nextInt(N * N);
                 P.open(Math.floorDiv(serial, N), serial % N);
             }
-            X[i] = P.numberOfOpenSites() / (N * N);
+            X[i] = P.numberOfOpenSites() / (double) (N * N);
         }
 
     }
     public double mean() { // sample mean of percolation threshold
         double temp = 0;
-        for (int x: X) {
+        for (double x: X) {
             temp += x;
         }
         return temp / testAmount;
@@ -39,7 +39,7 @@ public class PercolationStats {
     public double stddev() { // sample standard deviation of percolation threshold
         double miu = mean();
         double temp = 0;
-        for (int x: X) {
+        for (double x: X) {
             temp += (x - miu) * (x - miu);
         }
         return Math.sqrt(temp / (testAmount - 1));
