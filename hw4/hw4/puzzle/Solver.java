@@ -1,15 +1,14 @@
 package hw4.puzzle;
 import java.util.ArrayList;
-import hw4.puzzle.BestFirstSearch.*;
 import java.util.Collections;
 
 
 public class Solver {
-    private SearchNode bms;
+    private BestFirstSearch.SearchNode bms;
     public int total;
 
     public Solver(WorldState initial) {
-        bms = BestFirstSearch.BFS(initial);
+        bms = BestFirstSearch.bfs(initial);
     }
 
     public int moves() {
@@ -17,9 +16,9 @@ public class Solver {
     }
 
     public Iterable<WorldState> solution() {
-        ArrayList<WorldState> S= new ArrayList<>();
-        SearchNode temp = bms;
-        while(temp.previous != null) {
+        ArrayList<WorldState> S = new ArrayList<>();
+        BestFirstSearch.SearchNode temp = bms;
+        while (temp.previous != null) {
             S.add(temp.state);
             temp = temp.previous;
         }

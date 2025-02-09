@@ -1,5 +1,6 @@
 package hw4.puzzle;
 import edu.princeton.cs.algs4.Queue;
+import java.util.Arrays;
 
 public class Board implements WorldState{
     private int[][] tiles;
@@ -10,10 +11,8 @@ public class Board implements WorldState{
         N = tiles.length;
         this.tiles = new int[N][N];
         for (int i = 0; i < N; i += 1) {
-            for (int j = 0; j < N; j += 1) {
-                this.tiles[i][j] = tiles[i][j];
-                }
-            }
+            System.arraycopy(tiles[i], 0, this.tiles[i], 0, N);
+        }
     }
 
     public int tileAt(int i, int j) {
@@ -82,8 +81,8 @@ public class Board implements WorldState{
             for (int j = 0; j < N; j += 1) {
                 if (tileAt(i, j) != BLANK) {
                     int xShouldBe = (tileAt(i, j) - 1) / N;
-                    int YShouldBe = (tileAt(i, j) - 1) % N;
-                    manDistance += Math.abs(xShouldBe - i) + Math.abs(YShouldBe - j);
+                    int yShouldBe = (tileAt(i, j) - 1) % N;
+                    manDistance += Math.abs(xShouldBe - i) + Math.abs(yShouldBe - j);
                 }
             }
         }
@@ -93,18 +92,29 @@ public class Board implements WorldState{
     public int estimatedDistanceToGoal() {
         return manhattan();
     }
+
+    @Override
     public boolean equals(Object y) {
-        if (size() != ((Board) y).size()) {
+        if (this == y) {
+            return true;
+        }
+
+        if (y == null || getClass() != y.getClass()) {
             return false;
         }
-        for (int i = 0; i < N; i += 1) {
-            for (int j = 0; j < N; j += 1) {
-                if (this.tileAt(i, j) != ((Board) y).tileAt(i, j)) {
-                    return false;
-                }
-            }
+
+        Board Y = (Board) y;
+        
+        if (size() != Y.size()) {
+            return false;
         }
-        return true;
+
+        return Arrays.deepEquals(this.tiles, Y.tiles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(this.tiles);
     }
 
     public String toString() {

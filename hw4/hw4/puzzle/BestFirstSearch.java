@@ -21,7 +21,7 @@ public class BestFirstSearch {
 
     }
 
-    public static SearchNode BFS(WorldState initial) {
+    public static SearchNode bfs(WorldState initial) {
 
         SearchNode initial1 = new SearchNode(initial, 0, null);
 
