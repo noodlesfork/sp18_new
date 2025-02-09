@@ -69,7 +69,7 @@ public class Board implements WorldState{
         int wrong = 0;
         for (int i = 0; i < N; i += 1) {
             for (int j = 0; j < N; j += 1) {
-                if (tileAt(i, j) != 3 * i + j + 1) {
+                if ( tileAt(i, j) != 0 || tileAt(i, j) != 3 * i + j + 1) {
                     wrong += 1;
                 }
             }
@@ -94,6 +94,9 @@ public class Board implements WorldState{
         return manhattan();
     }
     public boolean equals(Object y) {
+        if (size() != ((Board) y).size()) {
+            return false;
+        }
         for (int i = 0; i < N; i += 1) {
             for (int j = 0; j < N; j += 1) {
                 if (this.tileAt(i, j) != ((Board) y).tileAt(i, j)) {

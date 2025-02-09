@@ -5,12 +5,11 @@ import java.util.Collections;
 
 
 public class Solver {
-    private searchNode bms;
+    private SearchNode bms;
     public int total;
 
     public Solver(WorldState initial) {
         bms = BestFirstSearch.BFS(initial);
-        total = BestFirstSearch.getTotalNodesInserted();
     }
 
     public int moves() {
@@ -19,7 +18,7 @@ public class Solver {
 
     public Iterable<WorldState> solution() {
         ArrayList<WorldState> S= new ArrayList<>();
-        searchNode temp = bms;
+        SearchNode temp = bms;
         while(temp.previous != null) {
             S.add(temp.state);
             temp = temp.previous;

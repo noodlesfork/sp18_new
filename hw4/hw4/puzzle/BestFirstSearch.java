@@ -4,17 +4,15 @@ import java.util.Comparator;
 
 
 public class BestFirstSearch {
-    private static MinPQ<searchNode> pq;
-    public static int total;
+    private static MinPQ<SearchNode> pq;
 
-
-    public static class searchNode {
+    public static class SearchNode {
         WorldState state;
         int movesFromInitial;
-        searchNode previous;
+        SearchNode previous;
         int priority;
 
-        private searchNode(WorldState state, int movesFromInitial, searchNode previous) {
+        private SearchNode(WorldState state, int movesFromInitial, SearchNode previous) {
             this.state = state;
             this.movesFromInitial = movesFromInitial;
             this.previous = previous;
@@ -23,14 +21,14 @@ public class BestFirstSearch {
 
     }
 
-    public static searchNode BFS(WorldState initial) {
+    public static SearchNode BFS(WorldState initial) {
 
-        searchNode initial1 = new searchNode(initial, 0, null);
+        SearchNode initial1 = new SearchNode(initial, 0, null);
 
         // 初始化minPQ
-        Comparator<searchNode> comparator = new Comparator<searchNode>() {
+        Comparator<SearchNode> comparator = new Comparator<SearchNode>() {
             @Override
-            public int compare(searchNode o1, searchNode o2) {
+            public int compare(SearchNode o1, SearchNode o2) {
                 return o1.priority - o2.priority;
             }
         };
@@ -39,25 +37,17 @@ public class BestFirstSearch {
         return aStar();
     }
 
-    private static searchNode aStar() {
-        System.out.println(1);
-        searchNode bms = pq.delMin();
+    private static SearchNode aStar() {
+        SearchNode bms = pq.delMin();
         WorldState F = bms.state;
         if (!F.isGoal()) {
             for (WorldState ws: F.neighbors()) {
                 if (bms.previous == null || !ws.equals(bms.previous.state)) {
-                    pq.insert(new searchNode(ws, bms.movesFromInitial + 1, bms));
-                    total += 1;
+                    pq.insert(new SearchNode(ws, bms.movesFromInitial + 1, bms));
                 }
             }
             bms = aStar();
         }
         return bms;
     }
-
-    public static int getTotalNodesInserted() {
-        return total;
-    }
-
-
 }
