@@ -5,7 +5,6 @@ import java.util.Collections;
 
 public class Solver {
     private BestFirstSearch.SearchNode bms;
-    public int total;
 
     public Solver(WorldState initial) {
         bms = BestFirstSearch.bfs(initial);

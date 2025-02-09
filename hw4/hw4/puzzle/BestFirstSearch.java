@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 public class BestFirstSearch {
     private static MinPQ<SearchNode> pq;
+    private static SearchNode finalNode;
 
     public static class SearchNode {
         WorldState state;
@@ -34,20 +35,26 @@ public class BestFirstSearch {
         };
         pq = new MinPQ<>(comparator);
         pq.insert(initial1);
-        return aStar();
+        aStar();
+        return finalNode;
     }
 
-    private static SearchNode aStar() {
-        SearchNode bms = pq.delMin();
-        WorldState F = bms.state;
-        if (!F.isGoal()) {
-            for (WorldState ws: F.neighbors()) {
-                if (bms.previous == null || !ws.equals(bms.previous.state)) {
-                    pq.insert(new SearchNode(ws, bms.movesFromInitial + 1, bms));
+    private static void aStar() {
+
+        while (!pq.isEmpty()) {
+            SearchNode bms = pq.delMin();
+            if (bms.state.isGoal()) {
+                finalNode = bms;
+                return;
+            }
+            // 处理邻居节点
+            for (WorldState neighbor : bms.state.neighbors()) {
+                // 避免回到前驱状态
+                if (bms.previous == null || !neighbor.equals(bms.previous.state)) {
+                    pq.insert(new SearchNode(neighbor, bms.movesFromInitial + 1, bms));
                 }
             }
-            bms = aStar();
         }
-        return bms;
+
     }
 }

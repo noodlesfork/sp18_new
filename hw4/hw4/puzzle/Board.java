@@ -2,7 +2,7 @@ package hw4.puzzle;
 import edu.princeton.cs.algs4.Queue;
 import java.util.Arrays;
 
-public class Board implements WorldState{
+public class Board implements WorldState {
     private int[][] tiles;
     private int N;
     private int BLANK = 0;
@@ -68,7 +68,7 @@ public class Board implements WorldState{
         int wrong = 0;
         for (int i = 0; i < N; i += 1) {
             for (int j = 0; j < N; j += 1) {
-                if ( tileAt(i, j) != 0 || tileAt(i, j) != 3 * i + j + 1) {
+                if (tileAt(i, j) != 0 && tileAt(i, j) != 3 * i + j + 1) {
                     wrong += 1;
                 }
             }
@@ -104,7 +104,7 @@ public class Board implements WorldState{
         }
 
         Board Y = (Board) y;
-        
+
         if (size() != Y.size()) {
             return false;
         }
@@ -119,11 +119,10 @@ public class Board implements WorldState{
 
     public String toString() {
         StringBuilder s = new StringBuilder();
-        int N = size();
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                s.append(String.format("%2d ", tileAt(i,j)));
+                s.append(String.format("%2d ", tileAt(i, j)));
             }
             s.append("\n");
         }
