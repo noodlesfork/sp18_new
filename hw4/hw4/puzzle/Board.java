@@ -68,7 +68,7 @@ public class Board implements WorldState {
         int wrong = 0;
         for (int i = 0; i < N; i += 1) {
             for (int j = 0; j < N; j += 1) {
-                if (tileAt(i, j) != 0 && tileAt(i, j) != 3 * i + j + 1) {
+                if (tileAt(i, j) != 0 && tileAt(i, j) != N * i + j + 1) {
                     wrong += 1;
                 }
             }
