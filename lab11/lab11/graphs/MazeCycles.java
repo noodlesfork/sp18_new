@@ -11,7 +11,6 @@ public class MazeCycles extends MazeExplorer {
     */
     private Maze maze;
     private int s = 0;
-    private boolean hasCycle = false;
     private int[] tempEdgeTo;
 
     public MazeCycles(Maze m) {
@@ -40,7 +39,6 @@ public class MazeCycles extends MazeExplorer {
                 findCycle(m);
             } else if (distTo[m] >= distTo[v]){
                 drawCycle(v, m);
-                hasCycle = true;
                 return;
             }
         }
